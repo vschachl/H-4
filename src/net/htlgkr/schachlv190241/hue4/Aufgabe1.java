@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class Aufgabe1 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Scanner s = new Scanner(System.in);
         Aufgabe1 aufgabe1 = new Aufgabe1();
         List<Integer> numbers = new ArrayList<>();
@@ -30,9 +30,15 @@ public class Aufgabe1 {
         System.out.println("Geben Sie einen beliebigen Teiler ein:");
         divider = Integer.parseInt(s.nextLine());
 
+
         Callable<List<Integer>> callable = new Teilen(divider, chunk, numbers);
-        ExecutorService executorService = Executors.newCachedThreadPool();
-        Future<List<Integer>> result = executorService.submit(callable);
+        ExecutorService executorService = Executors.newFixedThreadPool(chunk);
+
+        for(int i = 0; i < chunk; i++){
+            Future<List<Integer>> result = executorService.submit(callable);
+            result.get().forEach(System.out::println);
+        }
+
 
         executorService.shutdown();
     }
