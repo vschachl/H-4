@@ -29,11 +29,15 @@ private int chunk;
             if (n.get(i)%divider == 0){
                 System.out.println(n.get(i));
             }
+            else {
+                n.remove(n.get(i));
+            }
         }
     }
 
     @Override
     public List<Integer> call() throws Exception {
+        checkDivider(numbers, divider);
         return numbers;
     }
 }

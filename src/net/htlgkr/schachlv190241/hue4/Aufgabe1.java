@@ -5,9 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -18,7 +16,6 @@ public class Aufgabe1 {
         Scanner s = new Scanner(System.in);
         Aufgabe1 aufgabe1 = new Aufgabe1();
         List<Integer> numbers = new ArrayList<>();
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
         int divider = -1;
         int chunk = -1;
 
@@ -33,10 +30,11 @@ public class Aufgabe1 {
         System.out.println("Geben Sie einen beliebigen Teiler ein:");
         divider = Integer.parseInt(s.nextLine());
 
-        Teilen teilen = new Teilen(divider, chunk, numbers);
+        Callable<List<Integer>> callable = new Teilen(divider, chunk, numbers);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        Future<List<Integer>> result = executorService.submit(callable);
 
-
-        executor.shutdown();
+        executorService.shutdown();
     }
 
     public Stream<List<Integer>> seperateList(List<Integer> source, int length) throws IllegalAccessException {
