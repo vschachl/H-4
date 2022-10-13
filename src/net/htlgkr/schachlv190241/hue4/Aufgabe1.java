@@ -29,17 +29,14 @@ public class Aufgabe1 {
 
         System.out.println("Geben Sie einen beliebigen Teiler ein:");
         divider = Integer.parseInt(s.nextLine());
+        int counter = 100;
 
-
-        Callable<List<Integer>> callable = new Teilen(divider, chunk, numbers);
+        Callable<List<Integer>> callable = new Teilen(divider, counter, numbers);
         ExecutorService executorService = Executors.newFixedThreadPool(chunk);
 
         for(int i = 0; i < chunk; i++){
             Future<List<Integer>> result = executorService.submit(callable);
-            result.get().forEach(System.out::println);
         }
-
-
         executorService.shutdown();
     }
 
@@ -71,7 +68,6 @@ public class Aufgabe1 {
                     }
                 }
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
